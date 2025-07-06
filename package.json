@@ -1,0 +1,25 @@
+{
+  "name": "http-latency-tester",
+  "version": "1.0.0",
+  "description": "HTTP latency testing tool",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "ts-node src/index.ts",
+    "watch": "tsc -w",
+    "clean": "rm -rf dist"
+  },
+  "keywords": ["http", "latency", "testing", "typescript"],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "ts-node": "^10.9.0",
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "undici": "^6.0.0",
+    "got": "^14.0.0"
+  }
+}
