@@ -206,12 +206,12 @@ async function main(): Promise<void> {
   const tester = new HttpLatencyTester(targetUrl, proxies);
   
   // Example 1: Test with direct connection only
-  // console.log('=== Testing Direct Connection ===');
-  // await tester.runContinuousTesting(1000, false); // useProxy = false
+  console.log('=== Testing Direct Connection ===');
+  await tester.runContinuousTesting(1000, false); // useProxy = false
   
   // Example 2: Test with proxy rotation (uncomment to use)
-  console.log('=== Testing with Proxy Rotation ===');
-  await tester.runContinuousTesting(1000, true); // useProxy = true
+  // console.log('=== Testing with Proxy Rotation ===');
+  // await tester.runContinuousTesting(1000, true); // useProxy = true
   
   // Example 3: Single tests
   // const directResult = await tester.singleTest(false);
