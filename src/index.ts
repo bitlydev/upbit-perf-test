@@ -13,7 +13,8 @@ interface LatencyResult {
   latency: number;
   success: boolean;
   error?: string;
-  responseData?: any;
+  statusCode?: number;
+  responseBody?: string;
 }
 
 class HttpLatencyTester {
@@ -40,14 +41,15 @@ class HttpLatencyTester {
       const end = process.hrtime.bigint();
       const latency = Number(end - start) / 1_000_000; // Convert to milliseconds
       
-      const responseData = await response.body.json();
+      const responseBody = await response.body.text();
       
       return {
         timestamp,
         proxy: 'direct',
         latency,
         success: true,
-        responseData
+        statusCode: response.statusCode,
+        responseBody
       };
     } catch (error) {
       const end = process.hrtime.bigint();
@@ -86,14 +88,15 @@ class HttpLatencyTester {
       const end = process.hrtime.bigint();
       const latency = Number(end - start) / 1_000_000;
       
-      const responseData = await response.body.json();
+      const responseBody = await response.body.text();
       
       return {
         timestamp,
         proxy: proxyString,
         latency,
         success: true,
-        responseData
+        statusCode: response.statusCode,
+        responseBody
       };
     } catch (error) {
       const end = process.hrtime.bigint();
@@ -172,19 +175,16 @@ class HttpLatencyTester {
     
     console.log(`[${result.timestamp.toISOString()}] ${status} ${result.proxy} - ${latencyFormatted}ms`);
     
-    if (result.success && result.responseData) {
-      const data = result.responseData.data;
-      if (data) {
-        const listedAt = data.first_listed_at || 'N/A';
-        const category = data.category || 'N/A';
-        const title = data.title || 'N/A';
-        console.log(`  Data: ${listedAt} | ${category} | ${title}`);
-      }
+    if (result.success) {
+      console.log(`  Status Code: ${result.statusCode}`);
+      console.log(`  Response Body: ${result.responseBody}`);
     }
     
     if (!result.success) {
       console.log(`  Error: ${result.error}`);
     }
+    
+    console.log('---');
   }
 }
 
@@ -207,7 +207,7 @@ async function main(): Promise<void> {
   
   // Example 1: Test with direct connection only
   console.log('=== Testing Direct Connection ===');
-  await tester.runContinuousTesting(1000, false); // useProxy = false
+  await tester.runContinuousTesting(1100, false); // useProxy = false
   
   // Example 2: Test with proxy rotation (uncomment to use)
   // console.log('=== Testing with Proxy Rotation ===');
